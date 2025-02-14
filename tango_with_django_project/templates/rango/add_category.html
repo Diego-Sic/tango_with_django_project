@@ -1,0 +1,38 @@
+{% extends 'rango/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Add a Category
+{% endblock %}
+
+{% block body_block %}
+    <h1>Add a Category</h1>
+
+    <form id="category_form" method="post" action="{% url 'rango:add_category' %}">
+        {% csrf_token %}
+
+        <!-- Render hidden fields -->
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+
+        <!-- Render visible fields with error messages -->
+        {% for field in form.visible_fields %}
+            <div>
+                {{ field.label_tag }}
+                {{ field }}
+                <small>{{ field.help_text }}</small>
+                {% if field.errors %}
+                    <ul>
+                        {% for error in field.errors %}
+                            <li style="color: red;">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <!-- Submit Button -->
+        <input type="submit" name="submit" value="Create Category" />
+    </form>
+{% endblock %}
