@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a Page</title>
+</head>
+<body>
+    <h1>Add a Page to {{ category.name }}</h1>
+
+    <form id="page_form" method="post" action="{% url 'rango:add_page' category_name_slug=category.slug %}">
+        {% csrf_token %}
+
+        <!-- Render hidden fields -->
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+
+        <!-- Render visible fields with error messages -->
+        {% for field in form.visible_fields %}
+            <div>
+                {{ field.label_tag }}  <!-- Adds a label for the field -->
+                {{ field }}
+                <small>{{ field.help_text }}</small>
+                {% if field.errors %}
+                    <ul>
+                        {% for error in field.errors %}
+                            <li style="color: red;">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <!-- Submit Button -->
+        <input type="submit" name="submit" value="Create Page">
+    </form>
+</body>
+</html>
