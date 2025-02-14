@@ -1,16 +1,13 @@
 import os
 import django
+import random
 
-# Set up Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tango_with_django_project.settings')
 django.setup()
 
 from rango.models import Category, Page
 
 def populate():
-    """
-    Populate the database with initial data including views and likes for categories.
-    """
     categories = {
         'Python': {
             'pages': [
@@ -40,35 +37,27 @@ def populate():
         }
     }
 
-    # Add categories with views and likes
     for category_name, category_data in categories.items():
         category = add_category(category_name, category_data['views'], category_data['likes'])
-        for page in category_data['pages']:
-            add_page(category, page['title'], page['url'])
+        for i, page in enumerate(category_data['pages']):
+            add_page(category, page['title'], page['url'], views=random.randint(50, 500) + i * 10)
 
-    # Display the added categories and pages
     for category in Category.objects.all():
         for page in Page.objects.filter(category=category):
-            print(f'- {category.name}: {page.title}')
+            print(f'- {category.name}: {page.title} ({page.views} views)')
 
 def add_category(name, views=0, likes=0):
-    """
-    Create a new category or retrieve an existing one with views and likes.
-    """
     category, created = Category.objects.get_or_create(name=name, defaults={'views': views, 'likes': likes})
-    if not created:  # If it already exists, update views and likes
+    if not created:
         category.views = views
         category.likes = likes
         category.save()
     return category
 
 def add_page(category, title, url, views=0):
-    """
-    Create a new page or retrieve an existing one.
-    """
     page, _ = Page.objects.get_or_create(category=category, title=title)
     page.url = url
-    page.views = views
+    page.views = views  # Assigns a random view count
     page.save()
     return page
 

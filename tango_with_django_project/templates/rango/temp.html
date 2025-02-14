@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rango</title>
+</head>
+<body>
+    <h1>Rango says...</h1>
+
+    <div>
+        Hey there, partner! <br />
+        <strong>Crunchy, creamy, cookie, candy, cupcake!</strong>
+    </div>
+
+    <!-- Most Liked Categories Section -->
+    <h2>Most Liked Categories</h2>
+    <div>
+        {% if categories %}
+            <ul>
+                {% for category in categories %}
+                    <li>
+                        <a href="{% url 'rango:show_category' category.slug %}">{{ category.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No categories available.</p>
+        {% endif %}
+    </div>
+
+    <!-- Most Viewed Pages Section -->
+    <h2>Most Viewed Pages</h2>
+    <div>
+        {% if pages %}
+            <ul>
+                {% for page in pages %}
+                    <li>
+                        <a href="{{ page.url }}">{{ page.title }}</a> ({{ page.views }} views)
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No pages available.</p>
+        {% endif %}
+    </div>
+
+    <!-- About Link and Image -->
+    <div>
+        <a href="{% url 'rango:about' %}">About Rango</a><br />
+        <img src="{% static 'images/rango.jpg' %}" alt="Picture of Rango" />
+    </div>
+
+    <!-- Back to Home -->
+    <div>
+        <a href="{% url 'rango:index' %}">Home</a>
+    </div>
+</body>
+</html>
